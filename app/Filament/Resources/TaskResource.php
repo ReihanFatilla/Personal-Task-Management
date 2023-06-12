@@ -10,9 +10,11 @@ use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
+use App\Filament\Resources\TaskResource\Widgets\StatsOverview;
 
 class TaskResource extends Resource
 {
@@ -27,12 +29,12 @@ class TaskResource extends Resource
                 Forms\Components\TextInput::make('title')
                     ->columnSpan($span = 1)
                     ->autofocus()->required()->placeholder('What do you need to do?'),
-                Forms\Components\Select::make('priority')
-                    ->placeholder('How important is this task?')
+                Forms\Components\Select::make('status')
+                    ->placeholder('Have you done this Task?')
                     ->options([
-                        'Low' => 'Low',
-                        'Medium' => 'Medium',
-                        'High' => 'High',
+                        'Finished' => 'Finished',
+                        'In Progress' => 'In Progress',
+                        'Not Started' => 'Not Started',
                     ])
                     ->required(),
                 Forms\Components\RichEditor::make('description')
@@ -70,20 +72,20 @@ class TaskResource extends Resource
                 TextColumn::make('title'),
                 TextColumn::make('due_time')->time('H:i'),
                 TextColumn::make('due_date')->date('l, j M Y'),
-                BadgeColumn::make('priority')
-                ->sortable()
+                BadgeColumn::make('status')
+                    ->sortable()
                     ->colors([
-                        'warning' => static fn ($state): bool => $state === 'Medium',
-                        'success' => static fn ($state): bool => $state === 'Low',
-                        'danger' => static fn ($state): bool => $state === 'High',
-                    ])
+                        'warning' => static fn ($state): bool => $state === 'Finished',
+                        'success' => static fn ($state): bool => $state === 'In Progress',
+                        'danger' => static fn ($state): bool => $state === 'Not Started',
+                    ]),
             ])
             ->filters([
-                SelectFilter::make('priority')
+                SelectFilter::make('status')
                     ->options([
-                        'Low' => 'Low',
-                        'Medium' => 'Medium',
-                        'High' => 'High',
+                        'Finished' => 'Finished',
+                        'On Progress' => 'On Progress',
+                        'Not Started' => 'Not Started',
                     ])
             ])
             ->actions([
@@ -111,4 +113,5 @@ class TaskResource extends Resource
             'edit' => Pages\EditTask::route('/{record}/edit'),
         ];
     }
+
 }
