@@ -40,4 +40,9 @@ class TaskChart extends PieChartWidget
             ]
         ];
     }
+
+    public static function canView(): bool 
+    {
+        return auth()->user()->role == 'premium';
+    } 
 }

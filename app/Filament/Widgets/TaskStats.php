@@ -25,4 +25,9 @@ class TaskStats extends BaseWidget
             )
         ];
     }
+
+    public static function canView(): bool 
+    {
+        return auth()->user()->role == 'premium';
+    }
 }

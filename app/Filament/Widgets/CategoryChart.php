@@ -41,4 +41,9 @@ class CategoryChart extends PieChartWidget
                 ->pluck('name')
         ];
     }
+
+    public static function canView(): bool 
+    {
+        return auth()->user()->role == 'premium';
+    } 
 }
